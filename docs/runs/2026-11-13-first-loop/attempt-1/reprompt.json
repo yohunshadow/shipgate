@@ -1,0 +1,45 @@
+{
+  "gate": "blocked",
+  "attempt": 1,
+  "maxAttempts": 3,
+  "root": "/workspace/shipgate/examples/brew-bar",
+  "url": "http://localhost:5199",
+  "failures": [
+    {
+      "test": "tests/order_total_test.md",
+      "failedStep": {
+        "index": 3,
+        "heading": "Check the cart total",
+        "actions": [
+          "analyze: Reading the cart total from the order summary",
+          "analyze: Extracting the cart total from the order summary"
+        ]
+      },
+      "kane": {
+        "status": "failed",
+        "oneLiner": "The cart contains a $4.50 latte and a $3.00 croissant, but the displayed total is malformed rather than $7.50.",
+        "summary": "The total display is joining the item prices together instead of adding them as money amounts.\nFix the cart-total calculation to add numeric item prices and format the resulting amount once as currency. Add a test for a $4.50 item plus a $3.00 item displaying exactly $7.50.\nevidence: objective_contradiction: Final verification failed: \"the element with data-testid \"cart-total\" shows exactly \"$7.50\"\"",
+        "reason": "Final verification failed: \"the element with data-testid \"cart-total\" shows exactly \"$7.50\"\"",
+        "reasonCode": "assertion_error.confirmed_product_bug",
+        "finalState": {},
+        "rootCause": "The total display is joining the item prices together instead of adding them as money amounts.",
+        "verdictFamily": "application_issue",
+        "sessionDir": "/home/box/.testmuai/kaneai/sessions/7514bc39-67ab-48a2-865f-89a26405810f"
+      },
+      "bug": {
+        "title": "Cart total concatenates item prices instead of summing them",
+        "confirmed": true,
+        "family": "application_issue",
+        "category": "ui_data_defect",
+        "severity": "major",
+        "confidence": 0.98,
+        "oneLiner": "The cart contains a $4.50 latte and a $3.00 croissant, but the displayed total is malformed rather than $7.50."
+      },
+      "evidence": {
+        "shareUrl": "https://test-manager.lambdatest.com/projects/01M7AV3YP8WCG0N72S5RNYFQWC/test-cases/01M7AW4D93VF6G0PDR7MJ60HQS/dashboard/share/US_KA8PQ6L5Q3UQFBZITOVER4RU3E2RBVH4V27RMPB7OWPR5HOYK87YYHRIQ3Z4PCD0?type=summary&agentView=true&fqdn=summary-page",
+        "pack": "/home/box/.testmuai/kaneai/sessions/7514bc39-67ab-48a2-865f-89a26405810f/evidence/67f9869b-6604-4af5-845e-f7ec42cf0b5a.evidence",
+        "sessionId": "7514bc39-67ab-48a2-865f-89a26405810f"
+      }
+    }
+  ]
+}
