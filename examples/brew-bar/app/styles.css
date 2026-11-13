@@ -1,0 +1,24 @@
+:root { --bg:#0f0e0c; --card:#1a1815; --ink:#f4efe6; --mute:#a39b8c; --accent:#d9ff57; --line:#2c2924; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+.top { display:flex; justify-content:space-between; align-items:center; padding:20px 32px; border-bottom:1px solid var(--line); }
+.brand { font-weight:800; letter-spacing:-.02em; font-size:20px; display:flex; gap:10px; align-items:center; }
+.dot { width:12px; height:12px; border-radius:50%; background:var(--accent); box-shadow:0 0 18px var(--accent); }
+.tag { color:var(--mute); font-size:13px; }
+.layout { display:grid; grid-template-columns: 1fr 340px; gap:32px; padding:32px; max-width:1040px; margin:0 auto; }
+h1 { font-size:40px; letter-spacing:-.03em; margin:0 0 20px; }
+.items { list-style:none; padding:0; margin:0; display:grid; gap:12px; }
+.item { display:grid; grid-template-columns: 1fr auto auto; gap:16px; align-items:center; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px 18px; }
+.item h2 { margin:0; font-size:18px; } .item p { margin:2px 0 0; color:var(--mute); font-size:14px; }
+.price { font-variant-numeric: tabular-nums; color:var(--mute); }
+button { font:inherit; cursor:pointer; border-radius:999px; border:1px solid var(--line); background:#24211d; color:var(--ink); padding:8px 14px; }
+button.add:hover { border-color:var(--accent); }
+.cart { background:var(--card); border:1px solid var(--line); border-radius:20px; padding:20px; height:fit-content; position:sticky; top:24px; }
+.cart h2 { margin:0 0 12px; font-size:18px; }
+.lines { list-style:none; padding:0; margin:0 0 16px; display:grid; gap:6px; color:var(--mute); }
+.total-row { display:flex; justify-content:space-between; align-items:baseline; border-top:1px dashed var(--line); padding-top:14px; }
+.total-row strong { font-size:28px; font-variant-numeric: tabular-nums; }
+.checkout { width:100%; margin-top:16px; background:var(--accent); color:#111; border:none; font-weight:700; padding:12px; }
+.checkout:disabled { opacity:.35; cursor:not-allowed; }
+.status { min-height:1.5em; color:var(--accent); font-size:14px; }
+@media (max-width: 760px) { .layout { grid-template-columns:1fr; } }

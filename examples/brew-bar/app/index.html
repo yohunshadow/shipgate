@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Brew Bar · order ahead</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand"><span class="dot"></span> Brew Bar</div>
+    <span class="tag">order ahead · pick up in 5 min</span>
+  </header>
+
+  <main class="layout">
+    <section class="menu" aria-label="Menu">
+      <h1>What are we drinking?</h1>
+      <ul class="items" id="menu">
+        <li class="item">
+          <div><h2>Iced Latte</h2><p>double shot, oat milk</p></div>
+          <span class="price">$4.50</span>
+          <button class="add" data-name="Iced Latte" data-price="4.50">Add Iced Latte</button>
+        </li>
+        <li class="item">
+          <div><h2>Butter Croissant</h2><p>baked this morning</p></div>
+          <span class="price">$3.00</span>
+          <button class="add" data-name="Butter Croissant" data-price="3.00">Add Butter Croissant</button>
+        </li>
+        <li class="item">
+          <div><h2>Matcha Cloud</h2><p>ceremonial grade, foam top</p></div>
+          <span class="price">$5.25</span>
+          <button class="add" data-name="Matcha Cloud" data-price="5.25">Add Matcha Cloud</button>
+        </li>
+      </ul>
+    </section>
+
+    <aside class="cart" aria-label="Your order">
+      <h2>Your order</h2>
+      <ul id="cart-lines" class="lines"><li class="empty">Nothing yet.</li></ul>
+      <div class="total-row">
+        <span>Total</span>
+        <strong id="cart-total" data-testid="cart-total">$0.00</strong>
+      </div>
+      <button id="checkout" class="checkout" disabled>Place order</button>
+      <p id="status" class="status" role="status"></p>
+    </aside>
+  </main>
+
+  <script src="cart.js"></script>
+</body>
+</html>
