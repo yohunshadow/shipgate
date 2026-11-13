@@ -38,9 +38,9 @@ export function init(cwd, o) {
   write("tests/smoke_test.md", EXAMPLE_TEST);
   if (o.claude) {
     write(".claude/settings.json", {
-      hooks: { Stop: [{ hooks: [{ type: "command", command: "npx shipgate verify --hook claude", timeout: 900 }] }] },
+      hooks: { Stop: [{ hooks: [{ type: "command", command: "shipgate verify --hook claude", timeout: 900 }] }] },
     }, { json: true, merge: true });
-    write(".mcp.json", { mcpServers: { shipgate: { command: "npx", args: ["shipgate", "mcp"] } } }, { json: true });
+    write(".mcp.json", { mcpServers: { shipgate: { command: "shipgate", args: ["mcp"] } } }, { json: true });
   }
   if (o.codex) {
     write("AGENTS.md", fs.readFileSync(new URL("../integrations/codex/AGENTS.md", import.meta.url), "utf8"));

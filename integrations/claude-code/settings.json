@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "npx shipgate verify --hook claude",
+            "command": "shipgate verify --hook claude",
             "timeout": 900
           }
         ]

@@ -73,7 +73,7 @@ Requirements: Node 18+, Google Chrome, and a [TestMu AI](https://www.testmuai.co
 ```bash
 npm i -g @testmuai/kane-cli          # Kane CLI
 kane-cli login                       # once
-npm i -g github:yohunshadow/shipgate # Ship Gate
+npm i -g github:yohunshadow/shipgate # Ship Gate (not on npm: the `shipgate` name there belongs to an unrelated package, so don't use `npx shipgate`)
 
 cd your-app
 shipgate init --claude               # config + example flow + Claude Code hook (or --codex)

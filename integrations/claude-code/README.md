@@ -18,7 +18,7 @@ Every time Claude Code thinks it is done, the hook runs `shipgate verify --hook 
 `.mcp.json` in your project:
 
 ```json
-{ "mcpServers": { "shipgate": { "command": "npx", "args": ["shipgate", "mcp"] } } }
+{ "mcpServers": { "shipgate": { "command": "shipgate", "args": ["mcp"] } } }
 ```
 
 Claude gets `shipgate_verify` and `shipgate_deploy` tools.

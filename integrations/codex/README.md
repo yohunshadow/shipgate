@@ -6,6 +6,6 @@
 
 ```toml
 [mcp_servers.shipgate]
-command = "npx"
-args = ["shipgate", "mcp"]
+command = "shipgate"
+args = ["mcp"]
 ```

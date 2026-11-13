@@ -10,5 +10,5 @@
 Generic client config (Cursor `.cursor/mcp.json`, Claude Code `.mcp.json`, Windsurf, ...):
 
 ```json
-{ "mcpServers": { "shipgate": { "command": "npx", "args": ["shipgate", "mcp"] } } }
+{ "mcpServers": { "shipgate": { "command": "shipgate", "args": ["mcp"] } } }
 ```
