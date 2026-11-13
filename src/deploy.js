@@ -71,23 +71,56 @@ function listFiles(dir) {
   return out;
 }
 
-/** Deploy `dir` through the Vercel REST API with inline files. */
+/** Deploy `dir` through the Vercel REST API with inline files, then wait until it is live. */
 export async function vercelApiDeploy(cfg, dir, signoff) {
   const d = cfg.deploy || {};
-  const files = listFiles(dir).map((abs) => ({ file: path.relative(dir, abs), data: fs.readFileSync(abs).toString("base64"), encoding: "base64" }));
+  const api = "https://api.vercel.com";
+  const headers = { authorization: `Bearer ${process.env.VERCEL_TOKEN}`, "content-type": "application/json" };
+  const team = d.teamId || process.env.VERCEL_TEAM_ID || process.env.VERCEL_ORG_ID;
+  const q = team ? `?teamId=${encodeURIComponent(team)}` : d.scope ? `?slug=${encodeURIComponent(d.scope)}` : "";
+  const files = listFiles(dir).map((abs) => ({ file: path.relative(dir, abs).split(path.sep).join("/"), data: fs.readFileSync(abs).toString("base64"), encoding: "base64" }));
+  if (!files.length) { log.fail(`deploy: nothing to upload in ${dir}`); return { status: "deploy-failed", why: "empty" }; }
   const name = d.project || path.basename(cfg.root);
-  const q = d.teamId ? `?teamId=${encodeURIComponent(d.teamId)}` : d.scope ? `?slug=${encodeURIComponent(d.scope)}` : "";
-  log.step(`deploy: Vercel API → project "${name}" (${files.length} files, ${d.prod !== false ? "production" : "preview"})`);
+  const prod = d.prod !== false;
+  log.step(`deploy: Vercel API → project "${name}" (${files.length} files, ${prod ? "production" : "preview"})`);
   const body = {
-    name, files, ...(d.prod !== false ? { target: "production" } : {}),
-    projectSettings: { framework: null, ...(d.outputDirectory ? { outputDirectory: d.outputDirectory } : {}) },
-    meta: { shipgateFingerprint: signoff.fingerprint, shipgateSignedOffAt: signoff.at, shipgateKaneEvidence: (signoff.tests[0] || {}).shareUrl || "" },
+    name, project: name, files, ...(prod ? { target: "production" } : {}),
+    projectSettings: { framework: d.framework ?? null, buildCommand: d.buildCommand ?? null, outputDirectory: d.outputDirectory ?? null, installCommand: d.installCommand ?? null },
+    meta: {
+      shipgateFingerprint: String(signoff.fingerprint || ""), shipgateSignedOffAt: String(signoff.at || ""),
+      shipgateSignedOffBy: `kane-cli:${signoff.kaneUser || ""}`, shipgateGitSha: String(signoff.gitSha || ""),
+      shipgateKaneEvidence: String((signoff.tests && signoff.tests[0] && signoff.tests[0].shareUrl) || "").slice(0, 2000),
+    },
   };
-  const r = await fetch(`https://api.vercel.com/v13/deployments${q}`, {
-    method: "POST", headers: { authorization: `Bearer ${process.env.VERCEL_TOKEN}`, "content-type": "application/json" }, body: JSON.stringify(body),
-  });
+  // Vercel rejects empty meta values, so drop them.
+  for (const [k, v] of Object.entries(body.meta)) if (!v) delete body.meta[k];
+  const sep = q ? "&" : "?";
+  const r = await fetch(`${api}/v13/deployments${q}${sep}skipAutoDetectionConfirmation=1`, { method: "POST", headers, body: JSON.stringify(body) });
   const j = await r.json().catch(() => ({}));
-  if (!r.ok) { log.fail(`Vercel API ${r.status}: ${(j.error && j.error.message) || ""}`); return { status: "deploy-failed", httpStatus: r.status }; }
-  const url = `https://${j.alias && j.alias[0] ? j.alias[0] : j.url}`;
-  return { status: "deployed", url, deploymentId: j.id, inspectorUrl: j.inspectorUrl };
+  if (!r.ok) { log.fail(`Vercel API ${r.status}: ${(j.error && (j.error.code + " " + j.error.message)) || ""}`); return { status: "deploy-failed", httpStatus: r.status, error: j.error && j.error.code }; }
+  log.info(`deployment ${j.id} created (${j.readyState || j.status}), waiting until it is live…`);
+  let dep = j;
+  const end = Date.now() + (d.waitSeconds || 300) * 1000;
+  while (!["READY", "ERROR", "CANCELED"].includes(dep.readyState || dep.status) && Date.now() < end) {
+    await new Promise((res) => setTimeout(res, 3000));
+    const g = await fetch(`${api}/v13/deployments/${j.id}${q}`, { headers });
+    if (g.ok) dep = await g.json();
+  }
+  const state = dep.readyState || dep.status;
+  if (state !== "READY") { log.fail(`deployment ${j.id} ended in ${state}`); return { status: "deploy-failed", deploymentId: j.id, state }; }
+  // Prefer the shortest production alias (e.g. project.vercel.app) once aliasing is done.
+  let aliases = dep.alias || [];
+  if (prod) {
+    for (let i = 0; i < 10 && !dep.aliasAssigned; i++) {
+      await new Promise((res) => setTimeout(res, 2000));
+      const g = await fetch(`${api}/v13/deployments/${j.id}${q}`, { headers });
+      if (g.ok) dep = await g.json();
+    }
+    aliases = dep.alias || aliases;
+  }
+  const best = [...aliases].sort((a, b) => a.length - b.length)[0];
+  return {
+    status: "deployed", url: `https://${best || dep.url}`, deploymentUrl: `https://${dep.url}`, deploymentId: dep.id,
+    inspectorUrl: dep.inspectorUrl, target: dep.target || (prod ? "production" : "preview"),
+  };
 }
