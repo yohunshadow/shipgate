@@ -36,7 +36,8 @@ export async function deploy(cfg, signoff) {
     const url = (r.out.match(/https:\/\/\S+/g) || []).pop();
     return { status: r.code === 0 ? "deployed" : "deploy-failed", url, exitCode: r.code };
   }
-  // Vercel (default)
+  // Vercel (default). With VERCEL_TOKEN: REST API, no CLI needed. Else the logged-in vercel CLI.
+  if (process.env.VERCEL_TOKEN && d.via !== "cli") return vercelApiDeploy(cfg, dir, signoff);
   const auth = vercelAuthed();
   if (!auth) {
     log.warn("deploy: no VERCEL_TOKEN and no `vercel login` found, so Ship Gate stops at deploy-ready");
@@ -55,4 +56,38 @@ export async function deploy(cfg, signoff) {
 export function gitSha(cwd) {
   const r = spawnSync("git", ["rev-parse", "--short", "HEAD"], { cwd, encoding: "utf8" });
   return r.status === 0 ? r.stdout.trim() : null;
+}
+
+function listFiles(dir) {
+  const out = [];
+  const walk = (p) => {
+    for (const e of fs.readdirSync(p, { withFileTypes: true })) {
+      if ([".git", ".shipgate", "node_modules", ".vercel", ".testmuai"].includes(e.name) || e.name.startsWith("output-")) continue;
+      const abs = path.join(p, e.name);
+      if (e.isDirectory()) walk(abs); else out.push(abs);
+    }
+  };
+  walk(dir);
+  return out;
+}
+
+/** Deploy `dir` through the Vercel REST API with inline files. */
+export async function vercelApiDeploy(cfg, dir, signoff) {
+  const d = cfg.deploy || {};
+  const files = listFiles(dir).map((abs) => ({ file: path.relative(dir, abs), data: fs.readFileSync(abs).toString("base64"), encoding: "base64" }));
+  const name = d.project || path.basename(cfg.root);
+  const q = d.teamId ? `?teamId=${encodeURIComponent(d.teamId)}` : d.scope ? `?slug=${encodeURIComponent(d.scope)}` : "";
+  log.step(`deploy: Vercel API → project "${name}" (${files.length} files, ${d.prod !== false ? "production" : "preview"})`);
+  const body = {
+    name, files, ...(d.prod !== false ? { target: "production" } : {}),
+    projectSettings: { framework: null, ...(d.outputDirectory ? { outputDirectory: d.outputDirectory } : {}) },
+    meta: { shipgateFingerprint: signoff.fingerprint, shipgateSignedOffAt: signoff.at, shipgateKaneEvidence: (signoff.tests[0] || {}).shareUrl || "" },
+  };
+  const r = await fetch(`https://api.vercel.com/v13/deployments${q}`, {
+    method: "POST", headers: { authorization: `Bearer ${process.env.VERCEL_TOKEN}`, "content-type": "application/json" }, body: JSON.stringify(body),
+  });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) { log.fail(`Vercel API ${r.status}: ${(j.error && j.error.message) || ""}`); return { status: "deploy-failed", httpStatus: r.status }; }
+  const url = `https://${j.alias && j.alias[0] ? j.alias[0] : j.url}`;
+  return { status: "deployed", url, deploymentId: j.id, inspectorUrl: j.inspectorUrl };
 }
