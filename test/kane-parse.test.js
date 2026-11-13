@@ -33,3 +33,17 @@ test("after an adaptive heal, the healed attempt of the step is the one reported
   assert.equal(r.failedStep.heading, "Check the cart total");
   assert.match(r.runEnd.oneLiner, /\$04\.503\.00/);
 });
+
+test("a step that failed on replay but passed after heal is not reported as failed", () => {
+  const ev = [
+    { type: "test_md_step_start", step_index: 1, heading: "Open" },
+    { type: "test_md_step_end", step_index: 1, status: "failed" },
+    { type: "test_md_adaptive_heal", shrink_count: 1 },
+    { type: "test_md_step_start", step_index: 1, heading: "Open" },
+    { type: "test_md_step_end", step_index: 1, status: "passed" },
+    { type: "test_md_done", overall_status: "passed" },
+  ];
+  const r = parseTestmdEvents(ev, "x_test.md");
+  assert.equal(r.status, "passed");
+  assert.equal(r.failedStep, null);
+});

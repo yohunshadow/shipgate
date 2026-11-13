@@ -94,6 +94,7 @@ export function parseTestmdEvents(events, file) {
         break;
     }
   }
+  res.failedStep = res.steps.filter((s) => s.status === "failed").at(-1) || null;
   const re = (res.failedStep && res.failedStep.runEnd) || lastRunEnd;
   if (re) {
     res.runEnd = {
@@ -130,7 +131,10 @@ export function assertionsFrom(runEnd) {
 /** Run one *_test.md through Kane CLI against `url`. Streams progress, saves raw NDJSON. */
 export function runTestmd(file, { url, outDir, headless = true, timeout = 420, extraArgs = [], cwd } = {}) {
   const args = ["testmd", "run", file, "--agent"];
-  if (url) args.push("--url", url);
+  // Once Kane has recordings, retarget the replay instead of re-authoring step 1
+  // when the preview URL changes (local port, Vercel preview, production).
+  const recorded = fs.existsSync(path.join(path.dirname(file), `output-${path.basename(file, ".md").replace(/_test$/, "")}`, ".internal", "meta.json"));
+  if (url) args.push(recorded ? "--override-start-url" : "--url", url);
   if (headless) args.push("--headless");
   if (timeout) args.push("--timeout", String(timeout));
   args.push(...extraArgs);
