@@ -1,0 +1,17 @@
+
+▌ship gate  ·  verify
+────────────────────────────────────────────────────────────
+› preview: using https://shipgate-brew-bar.vercel.app
+› kane: tests/order_total_test.md
+  kane │ step 1: Open the menu
+  kane │ step 1 FAILED (4.81s)
+  kane │ step 1: Open the menu
+  kane │ step 1 passed (20.1s)
+  kane │ step 2: Add two items
+  kane │ step 2 passed (25.8s)
+  kane │ step 3: Check the cart total
+  kane │ step 3 passed (27.1s)
+  kane │ step 4: Place the order
+  kane │ step 4 passed (24.9s)
+  PASS tests/order_total_test.md · 24.27 credits · failed at "Open the menu"
+✔ Kane CLI signed off · 24.27 credits

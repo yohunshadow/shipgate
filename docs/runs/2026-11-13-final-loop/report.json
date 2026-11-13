@@ -1,0 +1,148 @@
+{
+  "runId": "2026-11-13T16-45-33",
+  "startedAt": "2026-11-13T16:45:33.042Z",
+  "kaneVersion": "0.10.4",
+  "kaneUser": "yendkontl",
+  "agent": "builtin (qwen2.5-coder:7b)",
+  "attempts": [
+    {
+      "attempt": 1,
+      "results": [
+        {
+          "test": "tests/order_total_test.md",
+          "status": "failed",
+          "credits": 8.69,
+          "durationS": 66,
+          "failedStep": {
+            "index": 3,
+            "heading": "Check the cart total"
+          },
+          "kane": {
+            "oneLiner": "The cart lists items priced at $4.50 and $3.00, but the displayed total is \"$04.503.00\" instead of \"$7.50\".",
+            "reason": "Final verification failed: \"the element with data-testid \"cart-total\" shows exactly \"$7.50\"\"",
+            "reasonCode": "assertion_error.confirmed_product_bug",
+            "finalState": {},
+            "rootCause": "The total display is joining the individual prices together rather than adding them."
+          },
+          "bug": {
+            "title": "Cart total concatenates item prices instead of calculating sum",
+            "confirmed": true,
+            "family": "application_issue",
+            "category": "ui_data_defect",
+            "severity": "major",
+            "confidence": 0.99,
+            "oneLiner": "The cart lists items priced at $4.50 and $3.00, but the displayed total is \"$04.503.00\" instead of \"$7.50\"."
+          },
+          "shareUrl": null,
+          "evidencePack": "/home/box/.testmuai/kaneai/sessions/f684f978-a49a-4552-b581-18a299b2dc29/evidence/2aba2909-1d69-43ff-ab11-bed99101d598.evidence",
+          "sessionId": "f684f978-a49a-4552-b581-18a299b2dc29",
+          "steps": [
+            {
+              "index": 1,
+              "heading": "Open the menu",
+              "status": "passed"
+            },
+            {
+              "index": 2,
+              "heading": "Add two items",
+              "status": "passed"
+            },
+            {
+              "index": 3,
+              "heading": "Check the cart total",
+              "status": "failed"
+            }
+          ]
+        }
+      ],
+      "credits": 8.69,
+      "reprompt": ".shipgate/runs/2026-11-13T16-45-33/attempt-1/reprompt.md",
+      "fix": {
+        "agent": "builtin:qwen2.5-coder:7b",
+        "applied": 1,
+        "rejected": 0,
+        "diagnosis": "The root cause is that the cart total is being concatenated as a string instead of being calculated as a sum.",
+        "usage": {
+          "prompt_tokens": 2500,
+          "prompt_tokens_details": {
+            "cached_tokens": 145
+          },
+          "completion_tokens": 295,
+          "total_tokens": 2795
+        },
+        "diffLines": 4
+      }
+    },
+    {
+      "attempt": 2,
+      "results": [
+        {
+          "test": "tests/order_total_test.md",
+          "status": "passed",
+          "credits": 10.96,
+          "durationS": 53,
+          "failedStep": null,
+          "kane": {
+            "oneLiner": "placed an order on localhost",
+            "reason": "Objective completed",
+            "reasonCode": "success.complete",
+            "finalState": {
+              "url": "http://localhost:5199/",
+              "status_message": "Order placed! Total charged: $7.50"
+            }
+          },
+          "bug": null,
+          "shareUrl": "https://test-manager.lambdatest.com/projects/01M7AV3YP8WCG0N72S5RNYFQWC/test-cases/01M7AW4D93VF6G0PDR7MJ60HQS/dashboard/share/US_X0TIBRYVY66SPQD0S60JB5EVO2ZNZ07N8XJNI82M2891LARREVV8VFOGBXY0IY9I?type=summary&agentView=true&fqdn=summary-page",
+          "evidencePack": "/home/box/.testmuai/kaneai/sessions/39f1ff10-51a2-4e5d-ae7b-e97538358c8f/evidence/f1d7d17a-54d2-4636-aa6c-97f24ce6d385.evidence",
+          "sessionId": "39f1ff10-51a2-4e5d-ae7b-e97538358c8f",
+          "steps": [
+            {
+              "index": 1,
+              "heading": "Open the menu",
+              "status": "passed"
+            },
+            {
+              "index": 2,
+              "heading": "Add two items",
+              "status": "passed"
+            },
+            {
+              "index": 3,
+              "heading": "Check the cart total",
+              "status": "passed"
+            },
+            {
+              "index": 4,
+              "heading": "Place the order",
+              "status": "passed"
+            }
+          ]
+        }
+      ],
+      "credits": 10.96
+    }
+  ],
+  "status": "passed",
+  "root": "/workspace/shipgate/examples/brew-bar",
+  "previewUrl": "http://localhost:5199",
+  "credits": 19.65,
+  "signoff": {
+    "signedOffBy": "kane-cli",
+    "kaneUser": "yendkontl",
+    "at": "2026-11-13T16:48:55.938Z",
+    "fingerprint": "d6afa1e4571ed3a7",
+    "gitSha": "633dd11",
+    "tests": [
+      {
+        "test": "tests/order_total_test.md",
+        "status": "passed",
+        "shareUrl": "https://test-manager.lambdatest.com/projects/01M7AV3YP8WCG0N72S5RNYFQWC/test-cases/01M7AW4D93VF6G0PDR7MJ60HQS/dashboard/share/US_X0TIBRYVY66SPQD0S60JB5EVO2ZNZ07N8XJNI82M2891LARREVV8VFOGBXY0IY9I?type=summary&agentView=true&fqdn=summary-page"
+      }
+    ]
+  },
+  "deploy": {
+    "status": "deploy-ready",
+    "note": "Set VERCEL_TOKEN (or run `vercel login`) and re-run `shipgate deploy` to ship the signed-off build."
+  },
+  "finishedAt": "2026-11-13T16:48:55.949Z"
+}

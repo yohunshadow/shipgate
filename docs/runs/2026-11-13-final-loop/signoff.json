@@ -1,0 +1,14 @@
+{
+  "signedOffBy": "kane-cli",
+  "kaneUser": "yendkontl",
+  "at": "2026-11-13T16:52:15.074Z",
+  "fingerprint": "d6afa1e4571ed3a7",
+  "gitSha": "633dd11",
+  "tests": [
+    {
+      "test": "tests/order_total_test.md",
+      "status": "passed",
+      "shareUrl": "https://test-manager.lambdatest.com/projects/01M7AV3YP8WCG0N72S5RNYFQWC/test-cases/01M7AW4D93VF6G0PDR7MJ60HQS/dashboard/share/US_V3OM4Z76RT18V8V8W9UB6RZSL78O208KE01EE92KJG08FKKJ8FZ6AR9HF9W7UZIJ?type=summary&agentView=true&fqdn=summary-page"
+    }
+  ]
+}

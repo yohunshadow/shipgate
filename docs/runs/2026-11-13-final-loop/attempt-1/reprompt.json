@@ -1,0 +1,65 @@
+{
+  "gate": "blocked",
+  "attempt": 1,
+  "maxAttempts": 3,
+  "root": "/workspace/shipgate/examples/brew-bar",
+  "url": "http://localhost:5199",
+  "failures": [
+    {
+      "test": "tests/order_total_test.md",
+      "failedStep": {
+        "index": 3,
+        "heading": "Check the cart total",
+        "actions": [
+          "analyze: Reading the cart total from the order summary",
+          "analyze: Extracting the cart total text"
+        ]
+      },
+      "kane": {
+        "status": "failed",
+        "oneLiner": "The cart lists items priced at $4.50 and $3.00, but the displayed total is \"$04.503.00\" instead of \"$7.50\".",
+        "summary": "The total display is joining the individual prices together rather than adding them.\nFix the cart-total calculation and formatting so $4.50 plus $3.00 displays exactly as $7.50.\nevidence: error_ui_text: $04.503.00",
+        "reason": "Final verification failed: \"the element with data-testid \"cart-total\" shows exactly \"$7.50\"\"",
+        "reasonCode": "assertion_error.confirmed_product_bug",
+        "finalState": {},
+        "rootCause": "The total display is joining the individual prices together rather than adding them.",
+        "verdictFamily": "application_issue",
+        "sessionDir": "/home/box/.testmuai/kaneai/sessions/f684f978-a49a-4552-b581-18a299b2dc29",
+        "assertions": [
+          {
+            "name": "cart_total_value_check",
+            "condition": "the element with data-testid \"cart-total\" shows exactly \"$7.50\"",
+            "expected": "$7.50",
+            "actual": "$04.503.00",
+            "result": "FAIL",
+            "locator": "internal:testid=[data-testid=\"cart-total\"s]",
+            "code": "el(23).textContent"
+          },
+          {
+            "name": "cart_total",
+            "condition": "the text of the cart total is stored as {{cart_total}}",
+            "expected": null,
+            "actual": "$04.503.00",
+            "result": "stored",
+            "locator": "internal:testid=[data-testid=\"cart-total\"s]",
+            "code": "el(23).textContent"
+          }
+        ]
+      },
+      "bug": {
+        "title": "Cart total concatenates item prices instead of calculating sum",
+        "confirmed": true,
+        "family": "application_issue",
+        "category": "ui_data_defect",
+        "severity": "major",
+        "confidence": 0.99,
+        "oneLiner": "The cart lists items priced at $4.50 and $3.00, but the displayed total is \"$04.503.00\" instead of \"$7.50\"."
+      },
+      "evidence": {
+        "shareUrl": null,
+        "pack": "/home/box/.testmuai/kaneai/sessions/f684f978-a49a-4552-b581-18a299b2dc29/evidence/2aba2909-1d69-43ff-ab11-bed99101d598.evidence",
+        "sessionId": "f684f978-a49a-4552-b581-18a299b2dc29"
+      }
+    }
+  ]
+}
