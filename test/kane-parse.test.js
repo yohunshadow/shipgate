@@ -24,3 +24,12 @@ test("extracts Kane's expected-vs-actual assertion from a real product-bug run",
   assert.equal(a.expected, "$7.50");
   assert.equal(a.actual, "$04.503.00");
 });
+
+test("after an adaptive heal, the healed attempt of the step is the one reported", () => {
+  const r = parseTestmdEvents(load("replay-heal-fail.ndjson"), "order_total_test.md");
+  assert.equal(r.status, "failed");
+  assert.ok(r.healed);
+  assert.equal(r.steps.length, 3);
+  assert.equal(r.failedStep.heading, "Check the cart total");
+  assert.match(r.runEnd.oneLiner, /\$04\.503\.00/);
+});

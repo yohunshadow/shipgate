@@ -40,6 +40,7 @@ export function buildReprompt(results, { attempt, maxAttempts, root, url }) {
       if (r.runEnd.oneLiner) L.push(`- **Kane saw:** ${r.runEnd.oneLiner}`);
       if (r.runEnd.reason) L.push(`- **Why it stopped:** ${r.runEnd.reason}`);
       if (r.runEnd.rootCause) L.push(`- **Kane's root cause:** ${r.runEnd.rootCause}`);
+      if (r.runEnd.summary && r.runEnd.summary !== r.runEnd.oneLiner) L.push(`- **Kane's notes:** ${r.runEnd.summary.replace(/\n+/g, " ")}`);
       if (r.runEnd.reasonCode) L.push(`- **Reason code:** \`${r.runEnd.reasonCode}\``);
       for (const a of (r.runEnd.assertions || []).filter((x) => x.result === "FAIL")) {
         L.push(`- **Assertion failed:** ${a.condition}\n  - expected: \`${a.expected}\`\n  - actual on the page: \`${a.actual}\`${a.locator ? `\n  - element: \`${a.locator}\`` : ""}${a.code ? ` read via \`${a.code}\`` : ""}`);
@@ -56,6 +57,7 @@ export function buildReprompt(results, { attempt, maxAttempts, root, url }) {
     }
     const passedSteps = r.steps.filter((s) => s.status === "passed").map((s) => `"${s.heading}"`);
     if (passedSteps.length) L.push(`- **Steps that passed before it:** ${passedSteps.join(", ")}`);
+    if (r.healed) L.push(`- **Note:** Kane replayed the recorded steps, the replay failed, and an adaptive re-author of the failing tail failed the same way, so this is not a flaky selector.`);
     if (r.shareUrl) L.push(`- **Evidence (Kane Test Manager):** ${r.shareUrl}`);
     if (r.evidencePack) L.push(`- **Evidence pack:** \`${r.evidencePack}\` (view with \`kane-cli evidence serve <path>\`)`);
     if (!r.steps.length && r.stderrTail) L.push(`- **Kane CLI error:**\n\n\`\`\`\n${r.stderrTail}\n\`\`\``);

@@ -45,9 +45,15 @@ export function parseTestmdEvents(events, file) {
   let lastRunEnd = null;
   for (const e of events) {
     switch (e.type) {
-      case "test_md_step_start":
+      case "test_md_step_start": {
+        // After an adaptive heal Kane re-runs steps; the newest attempt of a step wins.
         current = { index: e.step_index, heading: e.heading, status: "running", actions: [] };
-        res.steps.push(current);
+        const prev = res.steps.findIndex((s) => s.index === e.step_index);
+        if (prev >= 0) res.steps.splice(prev, 1, current); else res.steps.push(current);
+        break;
+      }
+      case "test_md_adaptive_heal":
+        res.healed = { shrinkCount: e.shrink_count, completeReauthor: e.complete_reauthor };
         break;
       case "step_event":
         if (current && e.event === "action") current.actions.push(`${e.action_type || "action"}: ${e.detail}${e.success === false ? " (FAILED)" : ""}`);
@@ -67,7 +73,7 @@ export function parseTestmdEvents(events, file) {
         if (current && current.index === e.step_index) {
           current.status = e.status;
           current.durationS = e.duration_s;
-          if (e.status === "failed" && !res.failedStep) res.failedStep = current;
+          if (e.status === "failed") res.failedStep = current;
         }
         break;
       case "test_md_summary":
