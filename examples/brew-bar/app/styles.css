@@ -13,6 +13,9 @@
   --latte: oklch(78% 0.07 65);
   --butter: oklch(84% 0.13 88);
   --receipt: oklch(99% 0.006 90);
+  --tint-latte: oklch(91% 0.035 70);
+  --tint-butter: oklch(89% 0.1 88);
+  --tint-matcha: oklch(91% 0.06 130);
   --grain: oklch(80% 0.04 70 / .35);
   --display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
   --body: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
@@ -49,15 +52,18 @@ h1 {
 
 .items { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
 .item {
-  display: grid; grid-template-columns: 64px minmax(0, 1fr) auto auto; gap: 16px; align-items: center;
+  display: grid; grid-template-columns: 80px minmax(0, 1fr) auto auto; gap: 16px; align-items: center;
   background: var(--receipt); border: 1.5px solid var(--ink); border-radius: var(--r-lg); padding: 16px;
   box-shadow: 4px 4px 0 var(--ink); transition: transform var(--dur-short) var(--ease), box-shadow var(--dur-short) var(--ease);
 }
 .item:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
-.swatch { width: 64px; height: 64px; border-radius: var(--r-md); border: 1.5px solid var(--ink); }
-.item--latte .swatch { background: linear-gradient(180deg, var(--paper) 0 30%, var(--latte) 30% 100%); }
-.item--croissant .swatch { background: radial-gradient(circle at 35% 35%, var(--receipt) 0 10%, var(--butter) 11% 100%); }
-.item--matcha .swatch { background: linear-gradient(180deg, var(--receipt) 0 26%, var(--matcha) 26% 100%); }
+.swatch { width: 80px; height: 80px; border-radius: var(--r-md); border: 1.5px solid var(--ink); }
+.swatch { display: grid; place-items: center; }
+.ill { width: 90%; height: 90%; transition: transform var(--dur-short) var(--ease); }
+.item:hover .ill { transform: rotate(-6deg) scale(1.06); }
+.item--latte .swatch { background: var(--tint-latte); }
+.item--croissant .swatch { background: var(--tint-butter); }
+.item--matcha .swatch { background: var(--tint-matcha); }
 .info { min-width: 0; }
 .item h2 { margin: 0; font: 800 24px/1.1 var(--display); letter-spacing: -0.02em; }
 .item p { margin: 4px 0 0; color: var(--ink-soft); font-size: 15px; }
@@ -99,12 +105,12 @@ button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 }
 @media (max-width: 520px) {
   .top { flex-direction: column; align-items: flex-start; gap: 12px; }
-  .item { grid-template-columns: 52px minmax(0, 1fr) auto; gap: 12px; }
-  .swatch { width: 52px; height: 52px; }
+  .item { grid-template-columns: 64px minmax(0, 1fr) auto; gap: 12px; }
+  .swatch { width: 64px; height: 64px; }
   .item h2 { font-size: 20px; }
   .add { grid-column: 1 / -1; width: 100%; padding: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .item, .add, .checkout { transition: none; }
-  .item:hover { transform: none; }
+  .item:hover, .item:hover .ill { transform: none; }
 }

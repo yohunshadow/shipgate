@@ -1,0 +1,82 @@
+{
+  "runId": "2026-11-13T17-58-20",
+  "startedAt": "2026-11-13T17:58:20.039Z",
+  "kaneVersion": "0.10.4",
+  "kaneUser": "yendkontl",
+  "agent": "builtin (qwen2.5-coder:7b)",
+  "attempts": [
+    {
+      "attempt": 1,
+      "results": [
+        {
+          "test": "tests/order_total_test.md",
+          "status": "passed",
+          "credits": 0,
+          "durationS": 8,
+          "failedStep": null,
+          "kane": {
+            "reason": "replay completed",
+            "reasonCode": "success.complete",
+            "finalState": {}
+          },
+          "bug": null,
+          "shareUrl": null,
+          "evidencePack": "/home/box/.testmuai/kaneai/sessions/fa2fc3dc-87d0-4e44-a476-b48ae72c1e7e/evidence/d5398b64-e4ee-4a13-bba8-d8b8bc7c44ce.evidence",
+          "sessionId": "fa2fc3dc-87d0-4e44-a476-b48ae72c1e7e",
+          "steps": [
+            {
+              "index": 1,
+              "heading": "Open the menu",
+              "status": "passed"
+            },
+            {
+              "index": 2,
+              "heading": "Add two items",
+              "status": "passed"
+            },
+            {
+              "index": 3,
+              "heading": "Check the cart total",
+              "status": "passed"
+            },
+            {
+              "index": 4,
+              "heading": "Place the order",
+              "status": "passed"
+            }
+          ]
+        }
+      ],
+      "credits": 0
+    }
+  ],
+  "status": "passed",
+  "root": "/workspace/shipgate/examples/brew-bar",
+  "previewUrl": "http://localhost:5199",
+  "credits": 0,
+  "signoff": {
+    "signedOffBy": "kane-cli",
+    "kaneUser": "yendkontl",
+    "at": "2026-11-13T17:58:35.394Z",
+    "fingerprint": "fed1b2ca21c2f8be",
+    "gitSha": "f6b8832",
+    "tests": [
+      {
+        "test": "tests/order_total_test.md",
+        "status": "passed",
+        "shareUrl": null,
+        "evidencePack": "/home/box/.testmuai/kaneai/sessions/fa2fc3dc-87d0-4e44-a476-b48ae72c1e7e/evidence/d5398b64-e4ee-4a13-bba8-d8b8bc7c44ce.evidence",
+        "sessionId": "fa2fc3dc-87d0-4e44-a476-b48ae72c1e7e"
+      }
+    ]
+  },
+  "deploy": {
+    "status": "deployed",
+    "url": "https://shipgate-brew-bar.vercel.app",
+    "deploymentUrl": "https://shipgate-brew-4xozqaew5-yendkontl-3176s-projects.vercel.app",
+    "deploymentId": "dpl_G8nC7grPFtqDzFJhgm6J1PahyS4Q",
+    "inspectorUrl": "https://vercel.com/yendkontl-3176s-projects/shipgate-brew-bar/G8nC7grPFtqDzFJhgm6J1PahyS4Q",
+    "target": "production"
+  },
+  "finishedAt": "2026-11-13T17:58:40.519Z"
+}

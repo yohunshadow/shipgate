@@ -1,0 +1,3 @@
+Skill update available: not installed → 0.1.4 — run `kane-cli install skill`
+
+evidence: view locally with `kane-cli evidence serve /home/box/.testmuai/kaneai/sessions/fa2fc3dc-87d0-4e44-a476-b48ae72c1e7e/evidence/d5398b64-e4ee-4a13-bba8-d8b8bc7c44ce.evidence`
