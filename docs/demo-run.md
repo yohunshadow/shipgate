@@ -36,14 +36,39 @@ attempt 2/3: Kane CLI verifies http://localhost:5199
 - Kane Test Manager evidence for the passing run: [summary](https://test-manager.lambdatest.com/projects/01M7AV3YP8WCG0N72S5RNYFQWC/test-cases/01M7AW4D93VF6G0PDR7MJ60HQS/dashboard/share/US_X0TIBRYVY66SPQD0S60JB5EVO2ZNZ07N8XJNI82M2891LARREVV8VFOGBXY0IY9I?type=summary&agentView=true&fqdn=summary-page)
 - Sign-off: [`signoff.json`](runs/2026-11-13-final-loop/signoff.json)
 
-## Deploy
+## Self-deploy, one command: [`runs/2026-11-14-self-deploy`](runs/2026-11-14-self-deploy/run.md)
+
+With `VERCEL_TOKEN` set, a single `shipgate` now does the whole thing, deploy included (14 Nov 2026, 00:06 WIB):
+
+```
+attempt 1/3: Kane CLI verifies http://localhost:5199
+  step 3 Check the cart total  FAILED (replay, then heal, both failed) · 7.15 credits
+  Kane: The cart contains a $4.50 latte and a $3.00 croissant, but the displayed total is malformed rather than $7.50.
+re-prompt → agent (builtin:qwen2.5-coder:7b, 51.6s)
+  -    total += line.price;            +    total += parseFloat(line.price);
+  -  return "$" + value;               +  return "$" + value.toFixed(2);
+attempt 2/3: steps 1–4 passed · 11.65 credits
+✔ Kane CLI signed off after 2 attempts · 18.8 credits
+› deploy: Vercel API → project "shipgate-brew-bar" (3 files, production)
+✔ deployed https://shipgate-brew-bar.vercel.app
+```
+
+- Deployment `dpl_AaC5jZe7k8KahtSgisB6aMEUeVYp` (production). The Vercel deployment metadata carries the sign-off: `shipgateFingerprint`, `shipgateSignedOffAt`, `shipgateSignedOffBy`, `shipgateGitSha`.
+- `shipgate deploy` on its own (sign-off `d6afa1e4571ed3a7` matched the code) also shipped to production, as `dpl_3Pezm6aDw8eBwTvV3HvDRXVwURvc`: [log](runs/2026-11-14-self-deploy/shipgate-deploy.log). With the bug put back, the same command refuses: `code changed since Kane signed off (d6afa1e4571ed3a7 → 2ca5a80f91a3e886)`.
+- Two deploy bugs turned up while testing this, and both are fixed. Vercel rejects empty `meta` values, which made the first attempt fail with `400 bad_request`. `shipgate deploy` also didn't print its result.
+
+### Production check, pure replay: [`runs/2026-11-14-production-replay`](runs/2026-11-14-production-replay/terminal.log)
+
+`shipgate verify --url https://shipgate-brew-bar.vercel.app` passed all 4 steps against production with **0 credits**, about 6 seconds of steps, and `replay_decisions: 4, author_decisions: 0`. Kane replayed its recorded flow with `--override-start-url`, so nothing had to be re-authored.
+
+## Deploy (first time, before VERCEL_TOKEN)
 
 The box had no `VERCEL_TOKEN` and no `vercel login`, so Ship Gate correctly stopped at **deploy-ready**. The signed-off files (fingerprint `d6afa1e4571ed3a7`) were then deployed to Vercel production through the Vercel API:
 
 - Production: **https://shipgate-brew-bar.vercel.app**
 - Deployment `dpl_45jHsgT5Kupv5943gpNpCUkiP5mB`, project `shipgate-brew-bar`
 
-With `VERCEL_TOKEN` set, `shipgate` performs this same REST deploy itself (`src/deploy.js`).
+This was later replaced by Ship Gate deploying by itself (see above).
 
 ## Production verify: [`runs/2026-11-13-production-verify`](runs/2026-11-13-production-verify/terminal.log)
 
@@ -59,4 +84,4 @@ Because of this run, Ship Gate now passes `--override-start-url` once a test has
 | [two bugs, three attempts](runs/2026-11-13-two-bugs-three-attempts/run.md) | The agent fixed only the sum (`parseFloat`). Kane then caught a **second** bug: *"The cart total is displayed as "$7.5" instead of the required "$7.50""*. A second re-prompt led to `toFixed(2)`, and the third attempt passed. | 28.29 |
 | (not kept) | Very first try: another app was already on port 4173. Kane reported *"The run opened the Pockets setup site instead of the Brew Bar start page"* (`config_issue`). That's why Ship Gate now picks a free port. The NDJSON is a test fixture: [`test/fixtures/wrong-target.ndjson`](../test/fixtures/wrong-target.ndjson). | 15.14 |
 
-Kane credits used for everything above: **~199** (9 test.md runs).
+Kane credits used for everything above: **~255** (14 test.md runs: ~199 on 13 Nov, plus 56.3 for the self-deploy runs on 14 Nov).

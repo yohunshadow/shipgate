@@ -64,7 +64,7 @@ This came from a real run on the demo app in [`examples/brew-bar`](examples/brew
 - **Evidence (Kane Test Manager):** https://test-manager.lambdatest.com/…
 ```
 
-Full logs from real runs are in [`docs/demo-run.md`](docs/demo-run.md) and [`docs/runs/`](docs/runs).
+Full logs from real runs are in [`docs/demo-run.md`](docs/demo-run.md) and [`docs/runs/`](docs/runs). Live demo, deployed by `shipgate` itself after Kane signed off: **https://shipgate-brew-bar.vercel.app**
 
 ## Quick start
 
@@ -148,7 +148,7 @@ export SHIPGATE_LLM_API_KEY=...                           # only for hosted endp
 
 - `preview` can be `{ "static": "dist" }`, `{ "command": "npm run dev", "url": "http://localhost:3000" }`, or `{ "url": "https://preview.example.com" }`.
 - `deploy.provider` is one of:
-  - `vercel`: uses the REST API when `VERCEL_TOKEN` is set, otherwise the logged-in `vercel` CLI. With neither, Ship Gate stops at **deploy-ready**.
+  - `vercel`: uses the REST API when `VERCEL_TOKEN` is set (`deploy.project`, `deploy.teamId` or `VERCEL_TEAM_ID`, `deploy.dir`; waits for READY and prints the production alias), otherwise the logged-in `vercel` CLI. With neither, Ship Gate stops at **deploy-ready**.
   - `command`: runs any script, with the sign-off JSON in `$SHIPGATE_SIGNOFF`.
   - `none`
 
