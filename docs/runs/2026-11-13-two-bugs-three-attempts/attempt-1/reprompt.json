@@ -1,0 +1,43 @@
+{
+  "gate": "blocked",
+  "attempt": 1,
+  "maxAttempts": 3,
+  "root": "/workspace/shipgate/examples/brew-bar",
+  "url": "http://localhost:5199",
+  "failures": [
+    {
+      "test": "tests/order_total_test.md",
+      "failedStep": {
+        "index": 3,
+        "heading": "Check the cart total",
+        "actions": [
+          "analyze: Reading the cart total from the order summary",
+          "analyze: Extracting the cart total text from the order summary"
+        ]
+      },
+      "kane": {
+        "status": "failed",
+        "summary": "",
+        "reason": "assertion_failed: @ step 3",
+        "finalState": {},
+        "rootCause": "The order summary is joining the individual item prices together rather than adding them into one total.",
+        "verdictFamily": "application_issue",
+        "assertions": []
+      },
+      "bug": {
+        "title": "Cart total concatenates item prices instead of summing them",
+        "confirmed": true,
+        "family": "application_issue",
+        "category": "ui_data_defect",
+        "severity": "major",
+        "confidence": 0.99,
+        "oneLiner": "The cart shows \"$04.503.00\" instead of the correct total, \"$7.50\"."
+      },
+      "evidence": {
+        "shareUrl": null,
+        "pack": "/home/box/.testmuai/kaneai/sessions/25e8a643-78f0-45a6-a5f2-d36a05d6a6e6/evidence/e48d4a7c-421a-4bcb-9c77-bc2061c1619c.evidence",
+        "sessionId": "25e8a643-78f0-45a6-a5f2-d36a05d6a6e6"
+      }
+    }
+  ]
+}

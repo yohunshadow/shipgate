@@ -1,0 +1,229 @@
+{
+  "runId": "2026-11-13T16-39-38",
+  "startedAt": "2026-11-13T16:39:38.402Z",
+  "kaneVersion": "0.10.4",
+  "kaneUser": "yendkontl",
+  "agent": "builtin (qwen2.5-coder:7b)",
+  "attempts": [
+    {
+      "attempt": 1,
+      "results": [
+        {
+          "test": "tests/order_total_test.md",
+          "status": "failed",
+          "credits": 8.57,
+          "durationS": 69,
+          "failedStep": {
+            "index": 3,
+            "heading": "Check the cart total"
+          },
+          "kane": {
+            "reason": "assertion_failed: @ step 3",
+            "finalState": {},
+            "rootCause": "The order summary is joining the individual item prices together rather than adding them into one total."
+          },
+          "bug": {
+            "title": "Cart total concatenates item prices instead of summing them",
+            "confirmed": true,
+            "family": "application_issue",
+            "category": "ui_data_defect",
+            "severity": "major",
+            "confidence": 0.99,
+            "oneLiner": "The cart shows \"$04.503.00\" instead of the correct total, \"$7.50\"."
+          },
+          "shareUrl": null,
+          "evidencePack": "/home/box/.testmuai/kaneai/sessions/25e8a643-78f0-45a6-a5f2-d36a05d6a6e6/evidence/e48d4a7c-421a-4bcb-9c77-bc2061c1619c.evidence",
+          "sessionId": "25e8a643-78f0-45a6-a5f2-d36a05d6a6e6",
+          "steps": [
+            {
+              "index": 1,
+              "heading": "Open the menu",
+              "status": "passed"
+            },
+            {
+              "index": 2,
+              "heading": "Add two items",
+              "status": "passed"
+            },
+            {
+              "index": 3,
+              "heading": "Check the cart total",
+              "status": "failed"
+            },
+            {
+              "index": 1,
+              "heading": "Open the menu",
+              "status": "passed"
+            },
+            {
+              "index": 2,
+              "heading": "Add two items",
+              "status": "passed"
+            },
+            {
+              "index": 3,
+              "heading": "Check the cart total",
+              "status": "failed"
+            }
+          ]
+        }
+      ],
+      "credits": 8.57,
+      "reprompt": ".shipgate/runs/2026-11-13T16-39-38/attempt-1/reprompt.md",
+      "fix": {
+        "agent": "builtin:qwen2.5-coder:7b",
+        "applied": 1,
+        "rejected": 0,
+        "diagnosis": "The root cause is that the `cartTotal` function is concatenating the item prices as strings instead of summing them as numbers.",
+        "usage": {
+          "prompt_tokens": 2247,
+          "prompt_tokens_details": {
+            "cached_tokens": 256
+          },
+          "completion_tokens": 305,
+          "total_tokens": 2552
+        },
+        "diffLines": 2
+      }
+    },
+    {
+      "attempt": 2,
+      "results": [
+        {
+          "test": "tests/order_total_test.md",
+          "status": "failed",
+          "credits": 8.42,
+          "durationS": 40,
+          "failedStep": {
+            "index": 3,
+            "heading": "Check the cart total"
+          },
+          "kane": {
+            "oneLiner": "The cart total is displayed as \"$7.5\" instead of the required \"$7.50\".",
+            "reason": "Final verification failed: \"the element with data-testid \"cart-total\" shows exactly \"$7.50\"\"",
+            "reasonCode": "assertion_error.confirmed_product_bug",
+            "finalState": {},
+            "rootCause": "The total is calculated correctly for the items in the cart, but the amount is shown without two decimal places."
+          },
+          "bug": {
+            "title": "Cart total omits trailing zero",
+            "confirmed": true,
+            "family": "application_issue",
+            "category": "ui_data_defect",
+            "severity": "minor",
+            "confidence": 0.98,
+            "oneLiner": "The cart total is displayed as \"$7.5\" instead of the required \"$7.50\"."
+          },
+          "shareUrl": null,
+          "evidencePack": "/home/box/.testmuai/kaneai/sessions/eea00272-33bc-4c48-a333-49aae82d8e1a/evidence/263cadb5-64f9-4e93-877a-2c4b5acd35ef.evidence",
+          "sessionId": "eea00272-33bc-4c48-a333-49aae82d8e1a",
+          "steps": [
+            {
+              "index": 1,
+              "heading": "Open the menu",
+              "status": "passed"
+            },
+            {
+              "index": 2,
+              "heading": "Add two items",
+              "status": "passed"
+            },
+            {
+              "index": 3,
+              "heading": "Check the cart total",
+              "status": "failed"
+            }
+          ]
+        }
+      ],
+      "credits": 8.42,
+      "reprompt": ".shipgate/runs/2026-11-13T16-39-38/attempt-2/reprompt.md",
+      "fix": {
+        "agent": "builtin:qwen2.5-coder:7b",
+        "applied": 1,
+        "rejected": 0,
+        "diagnosis": "The root cause is that the `formatMoney` function does not ensure the total has two decimal places.",
+        "usage": {
+          "prompt_tokens": 2382,
+          "prompt_tokens_details": {
+            "cached_tokens": 145
+          },
+          "completion_tokens": 308,
+          "total_tokens": 2690
+        },
+        "diffLines": 2
+      }
+    },
+    {
+      "attempt": 3,
+      "results": [
+        {
+          "test": "tests/order_total_test.md",
+          "status": "passed",
+          "credits": 11.3,
+          "durationS": 54,
+          "failedStep": null,
+          "kane": {
+            "oneLiner": "placed an order on localhost",
+            "reason": "Objective completed",
+            "reasonCode": "success.complete",
+            "finalState": {
+              "url": "http://localhost:5199/",
+              "status_message": "Order placed! Total charged: $7.50"
+            }
+          },
+          "bug": null,
+          "shareUrl": "https://test-manager.lambdatest.com/projects/01M7AV3YP8WCG0N72S5RNYFQWC/test-cases/01M7AW4D93VF6G0PDR7MJ60HQS/dashboard/share/US_37FJV82HB3TBYNKNT1RH20NZZOJXQN8DX6EUFXBQBDMQCQTAIW1IYEEC33S1F1KJ?type=summary&agentView=true&fqdn=summary-page",
+          "evidencePack": "/home/box/.testmuai/kaneai/sessions/b299a19d-3402-49ec-8f7b-73ccd4b517d5/evidence/1eb64c08-358a-4e77-bdb2-aa7d04fb3dc7.evidence",
+          "sessionId": "b299a19d-3402-49ec-8f7b-73ccd4b517d5",
+          "steps": [
+            {
+              "index": 1,
+              "heading": "Open the menu",
+              "status": "passed"
+            },
+            {
+              "index": 2,
+              "heading": "Add two items",
+              "status": "passed"
+            },
+            {
+              "index": 3,
+              "heading": "Check the cart total",
+              "status": "passed"
+            },
+            {
+              "index": 4,
+              "heading": "Place the order",
+              "status": "passed"
+            }
+          ]
+        }
+      ],
+      "credits": 11.3
+    }
+  ],
+  "status": "passed",
+  "root": "/workspace/shipgate/examples/brew-bar",
+  "previewUrl": "http://localhost:5199",
+  "credits": 28.29,
+  "signoff": {
+    "signedOffBy": "kane-cli",
+    "kaneUser": "yendkontl",
+    "at": "2026-11-13T16:44:49.785Z",
+    "fingerprint": "4dcfc023837a2fbf",
+    "gitSha": "dadf3f6",
+    "tests": [
+      {
+        "test": "tests/order_total_test.md",
+        "status": "passed",
+        "shareUrl": "https://test-manager.lambdatest.com/projects/01M7AV3YP8WCG0N72S5RNYFQWC/test-cases/01M7AW4D93VF6G0PDR7MJ60HQS/dashboard/share/US_37FJV82HB3TBYNKNT1RH20NZZOJXQN8DX6EUFXBQBDMQCQTAIW1IYEEC33S1F1KJ?type=summary&agentView=true&fqdn=summary-page"
+      }
+    ]
+  },
+  "deploy": {
+    "status": "deploy-ready",
+    "note": "Set VERCEL_TOKEN (or run `vercel login`) and re-run `shipgate deploy` to ship the signed-off build."
+  },
+  "finishedAt": "2026-11-13T16:44:49.804Z"
+}

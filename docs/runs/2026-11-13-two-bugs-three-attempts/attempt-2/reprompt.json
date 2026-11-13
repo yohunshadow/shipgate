@@ -1,0 +1,65 @@
+{
+  "gate": "blocked",
+  "attempt": 2,
+  "maxAttempts": 3,
+  "root": "/workspace/shipgate/examples/brew-bar",
+  "url": "http://localhost:5199",
+  "failures": [
+    {
+      "test": "tests/order_total_test.md",
+      "failedStep": {
+        "index": 3,
+        "heading": "Check the cart total",
+        "actions": [
+          "analyze: Reading the cart total from the order summary",
+          "analyze: Extracting the cart total text from the order summary"
+        ]
+      },
+      "kane": {
+        "status": "failed",
+        "oneLiner": "The cart total is displayed as \"$7.5\" instead of the required \"$7.50\".",
+        "summary": "The total is calculated correctly for the items in the cart, but the amount is shown without two decimal places.\nFormat cart totals as currency with exactly two decimal places, including trailing zeroes.\nevidence: objective_contradiction: $7.5",
+        "reason": "Final verification failed: \"the element with data-testid \"cart-total\" shows exactly \"$7.50\"\"",
+        "reasonCode": "assertion_error.confirmed_product_bug",
+        "finalState": {},
+        "rootCause": "The total is calculated correctly for the items in the cart, but the amount is shown without two decimal places.",
+        "verdictFamily": "application_issue",
+        "sessionDir": "/home/box/.testmuai/kaneai/sessions/eea00272-33bc-4c48-a333-49aae82d8e1a",
+        "assertions": [
+          {
+            "name": "cart_total_value_check",
+            "condition": "the element with data-testid \"cart-total\" shows exactly \"$7.50\"",
+            "expected": "$7.50",
+            "actual": "$7.5",
+            "result": "FAIL",
+            "locator": "internal:testid=[data-testid=\"cart-total\"s]",
+            "code": "el(23).textContent"
+          },
+          {
+            "name": "cart_total",
+            "condition": "the text of the cart total is saved as {{cart_total}}",
+            "expected": null,
+            "actual": "$7.5",
+            "result": "stored",
+            "locator": "internal:testid=[data-testid=\"cart-total\"s]",
+            "code": "el(23).textContent"
+          }
+        ]
+      },
+      "bug": {
+        "title": "Cart total omits trailing zero",
+        "confirmed": true,
+        "family": "application_issue",
+        "category": "ui_data_defect",
+        "severity": "minor",
+        "confidence": 0.98,
+        "oneLiner": "The cart total is displayed as \"$7.5\" instead of the required \"$7.50\"."
+      },
+      "evidence": {
+        "shareUrl": null,
+        "pack": "/home/box/.testmuai/kaneai/sessions/eea00272-33bc-4c48-a333-49aae82d8e1a/evidence/263cadb5-64f9-4e93-877a-2c4b5acd35ef.evidence",
+        "sessionId": "eea00272-33bc-4c48-a333-49aae82d8e1a"
+      }
+    }
+  ]
+}

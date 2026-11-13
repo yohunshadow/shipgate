@@ -1,0 +1,13 @@
+diff --git a/app/cart.js b/app/cart.js
+index a3bf1f0..19e976f 100644
+--- a/app/cart.js
++++ b/app/cart.js
+@@ -10,7 +10,7 @@ function cartTotal(lines) {
+ }
+ 
+ function formatMoney(value) {
+-  return "$" + value;
++  return "$" + value.toFixed(2); // Ensure two decimal places
+ }
+ 
+ function render() {

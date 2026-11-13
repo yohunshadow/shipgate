@@ -1,0 +1,13 @@
+diff --git a/app/cart.js b/app/cart.js
+index 8aa75c9..a3bf1f0 100644
+--- a/app/cart.js
++++ b/app/cart.js
+@@ -4,7 +4,7 @@ const cart = [];
+ function cartTotal(lines) {
+   let total = 0;
+   for (const line of lines) {
+-    total += line.price;
++    total += parseFloat(line.price); // Convert price to float before adding
+   }
+   return total;
+ }
