@@ -21,7 +21,7 @@ export async function verifyAndReprompt(cfg, { attempt = 1, maxAttempts = cfg.ma
   if (passed) {
     const signoff = {
       signedOffBy: "kane-cli", kaneUser: kaneWhoami(), at: new Date().toISOString(), fingerprint: fingerprint(cfg), gitSha: gitSha(cfg.root),
-      tests: results.map((r) => ({ test: path.relative(cfg.root, r.file), status: r.status, shareUrl: r.shareUrl })),
+      tests: results.map((r) => ({ test: path.relative(cfg.root, r.file), status: r.status, shareUrl: r.shareUrl, evidencePack: r.evidencePack, sessionId: r.sessionId })),
     };
     fs.writeFileSync(path.join(stateDir(cfg), "signoff.json"), JSON.stringify(signoff, null, 2));
     return { passed, credits, results, signoff, dir };

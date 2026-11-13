@@ -87,6 +87,11 @@ async function main() {
   if (cmd === "deploy") {
     log.banner("deploy");
     const r = await deployIfSignedOff(cfg);
+    if (r.status === "deployed") log.ok(`deployed to ${r.target || "vercel"}: ${r.url}${r.deploymentUrl && r.deploymentUrl !== r.url ? color.dim(`  (${r.deploymentUrl})`) : ""}`);
+    else if (r.status === "deploy-ready") log.ok(`deploy-ready: ${r.note}`);
+    else if (r.status === "deploy-failed") log.fail("deploy failed");
+    fs.mkdirSync(stateDir(cfg), { recursive: true });
+    fs.writeFileSync(path.join(stateDir(cfg), "last-deploy.json"), JSON.stringify({ at: new Date().toISOString(), ...r }, null, 2));
     return r.status === "deployed" || r.status === "deploy-ready" ? 0 : 1;
   }
   if (cmd === "reprompt") {

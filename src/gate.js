@@ -82,7 +82,7 @@ export async function runGate(cfg, opts = {}) {
   if (report.status === "passed") {
     const signoff = {
       signedOffBy: "kane-cli", kaneUser: who, at: new Date().toISOString(), fingerprint: fingerprint(cfg), gitSha: gitSha(cfg.root),
-      tests: report.attempts.at(-1).results.map((r) => ({ test: r.test, status: r.status, shareUrl: r.shareUrl })),
+      tests: report.attempts.at(-1).results.map((r) => ({ test: r.test, status: r.status, shareUrl: r.shareUrl, evidencePack: r.evidencePack, sessionId: r.sessionId })),
     };
     fs.writeFileSync(path.join(stateDir(cfg), "signoff.json"), JSON.stringify(signoff, null, 2));
     report.signoff = signoff;
