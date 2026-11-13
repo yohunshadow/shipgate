@@ -9,7 +9,7 @@
   "files": ["bin", "src", "integrations", "README.md", "LICENSE"],
   "engines": { "node": ">=18" },
   "scripts": {
-    "test": "node --test test/"
+    "test": "node --test test/*.test.js"
   },
   "keywords": ["kane-cli", "testmu", "ai-agent", "deploy", "vercel", "e2e", "claude-code", "codex", "mcp"],
   "repository": { "type": "git", "url": "https://github.com/yohunshadow/shipgate.git" },

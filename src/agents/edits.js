@@ -9,6 +9,10 @@ export function parseEdits(text) {
   let m;
   BLOCK.lastIndex = 0;
   while ((m = BLOCK.exec(text))) edits.push({ file: m[1].replace(/^[`'"]|[`'"]$/g, ""), search: m[2], replace: m[3] });
+  if (edits.length) return edits;
+  // Fallback: models often answer "FILE: path" + a fenced full file instead.
+  const WHOLE = /FILE:\s*(\S+)\s*\n+```[\w-]*\n([\s\S]*?)\n```/g;
+  while ((m = WHOLE.exec(text))) edits.push({ file: m[1].replace(/^[`'"]|[`'"]$/g, ""), whole: m[2] + "\n" });
   return edits;
 }
 
@@ -41,11 +45,16 @@ export function applyEdits(edits, root, { protect = [/_test\.md$/] } = {}) {
     if (!abs.startsWith(path.resolve(root) + path.sep)) { rejected.push({ ...e, why: "outside project" }); continue; }
     if (protect.some((re) => re.test(abs))) { rejected.push({ ...e, why: "tests are read-only for the agent" }); continue; }
     if (!fs.existsSync(abs)) {
+      if (e.whole != null) { rejected.push({ ...e, why: "file not found" }); continue; }
       if (e.search.trim() === "") { fs.mkdirSync(path.dirname(abs), { recursive: true }); fs.writeFileSync(abs, e.replace); applied.push(e); }
       else rejected.push({ ...e, why: "file not found" });
       continue;
     }
     const src = fs.readFileSync(abs, "utf8");
+    if (e.whole != null) {
+      if (e.whole.trim().length < src.trim().length * 0.5) { rejected.push({ ...e, why: "full-file rewrite looks truncated" }); continue; }
+      fs.writeFileSync(abs, e.whole); applied.push(e); continue;
+    }
     const out = fuzzyReplace(src, e.search, e.replace);
     if (out == null) { rejected.push({ ...e, why: "SEARCH text not found" }); continue; }
     fs.writeFileSync(abs, out);
