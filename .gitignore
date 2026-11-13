@@ -1,0 +1,8 @@
+node_modules/
+.shipgate/
+.testmuai/evidence/
+.testmuai/sessions/
+.vercel/
+.env
+.env.*
+*.evidence

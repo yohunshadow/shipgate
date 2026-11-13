@@ -1,0 +1,17 @@
+{
+  "name": "shipgate",
+  "version": "0.1.0",
+  "description": "Ship Gate: refuse to deploy until Kane CLI signs off. Failed browser runs are turned into re-prompts for your coding agent, which fixes, re-verifies, and only then ships.",
+  "type": "module",
+  "bin": {
+    "shipgate": "bin/shipgate.js"
+  },
+  "files": ["bin", "src", "integrations", "README.md", "LICENSE"],
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "test": "node --test test/"
+  },
+  "keywords": ["kane-cli", "testmu", "ai-agent", "deploy", "vercel", "e2e", "claude-code", "codex", "mcp"],
+  "repository": { "type": "git", "url": "https://github.com/yohunshadow/shipgate.git" },
+  "license": "MIT"
+}
