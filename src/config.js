@@ -15,7 +15,7 @@ export const DEFAULTS = {
   maxAttempts: 3,
   // What to do once Kane signs off.
   deploy: { provider: "vercel", prod: true },
-  kane: { headless: true, timeout: 420, extraArgs: [] },
+  kane: { headless: true, timeout: 420, extraArgs: [], onLockConflict: null },
 };
 
 export function loadConfig(cwd = process.cwd(), file) {

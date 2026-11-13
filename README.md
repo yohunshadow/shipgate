@@ -142,7 +142,7 @@ export SHIPGATE_LLM_API_KEY=...                           # only for hosted endp
   "agent": { "type": "builtin", "model": "qwen2.5-coder:7b", "include": "app" },
   "maxAttempts": 3,
   "deploy": { "provider": "vercel", "prod": true },
-  "kane": { "headless": true, "timeout": 420 }
+  "kane": { "headless": true, "timeout": 420, "onLockConflict": "readonly" }
 }
 ```
 
@@ -151,6 +151,7 @@ export SHIPGATE_LLM_API_KEY=...                           # only for hosted endp
   - `vercel`: uses the REST API when `VERCEL_TOKEN` is set (`deploy.project`, `deploy.teamId` or `VERCEL_TEAM_ID`, `deploy.dir`; waits for READY and prints the production alias), otherwise the logged-in `vercel` CLI. With neither, Ship Gate stops at **deploy-ready**.
   - `command`: runs any script, with the sign-off JSON in `$SHIPGATE_SIGNOFF`.
   - `none`
+- `kane.onLockConflict` is passed to `kane-cli --on-lock-conflict` (`readonly`, `fail` or `wait`). Test Manager allows one playground session per account; with another session open, `readonly` still runs every step locally but skips the Test Manager upload link, and `wait` polls every 30 seconds until the lock frees.
 
 ## What Kane CLI does here
 

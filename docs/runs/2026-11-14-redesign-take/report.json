@@ -1,0 +1,147 @@
+{
+  "runId": "2026-11-13T17-37-30",
+  "startedAt": "2026-11-13T17:37:30.636Z",
+  "kaneVersion": "0.10.4",
+  "kaneUser": "yendkontl",
+  "agent": "builtin (qwen2.5-coder:7b)",
+  "attempts": [
+    {
+      "attempt": 1,
+      "results": [
+        {
+          "test": "tests/order_total_test.md",
+          "status": "error",
+          "credits": 0,
+          "failedStep": {
+            "index": 3,
+            "heading": "Check the cart total"
+          },
+          "kane": {
+            "reason": "assertion_failed: @ step 3",
+            "finalState": {},
+            "rootCause": "The order summary is putting the item prices together as text rather than adding them into one total."
+          },
+          "bug": {
+            "title": "Cart total concatenates item prices",
+            "confirmed": false,
+            "family": "application_issue",
+            "category": "ui_data_defect",
+            "severity": "major",
+            "confidence": 0.99,
+            "oneLiner": "The cart total displays \"$04.503.00\" instead of \"$7.50\" for the two items shown."
+          },
+          "shareUrl": null,
+          "evidencePack": null,
+          "sessionId": null,
+          "steps": [
+            {
+              "index": 1,
+              "heading": "Open the menu",
+              "status": "passed"
+            },
+            {
+              "index": 2,
+              "heading": "Add two items",
+              "status": "passed"
+            },
+            {
+              "index": 3,
+              "heading": "Check the cart total",
+              "status": "failed"
+            }
+          ]
+        }
+      ],
+      "credits": 0,
+      "reprompt": ".shipgate/runs/2026-11-13T17-37-30/attempt-1/reprompt.md",
+      "fix": {
+        "agent": "builtin:qwen2.5-coder:7b",
+        "applied": 1,
+        "rejected": 0,
+        "diagnosis": "The root cause is that the cart total is being concatenated as text rather than added as numbers.",
+        "usage": {
+          "prompt_tokens": 4012,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens": 307,
+          "total_tokens": 4319
+        },
+        "diffLines": 4
+      }
+    },
+    {
+      "attempt": 2,
+      "results": [
+        {
+          "test": "tests/order_total_test.md",
+          "status": "passed",
+          "credits": 0,
+          "durationS": 7,
+          "failedStep": null,
+          "kane": {
+            "reason": "replay completed",
+            "reasonCode": "success.complete",
+            "finalState": {}
+          },
+          "bug": null,
+          "shareUrl": null,
+          "evidencePack": "/home/box/.testmuai/kaneai/sessions/ecc013e3-42fc-429f-a872-03bdaba16e81/evidence/c96ad2b6-d27a-4b4e-921e-73567090741d.evidence",
+          "sessionId": "ecc013e3-42fc-429f-a872-03bdaba16e81",
+          "steps": [
+            {
+              "index": 1,
+              "heading": "Open the menu",
+              "status": "passed"
+            },
+            {
+              "index": 2,
+              "heading": "Add two items",
+              "status": "passed"
+            },
+            {
+              "index": 3,
+              "heading": "Check the cart total",
+              "status": "passed"
+            },
+            {
+              "index": 4,
+              "heading": "Place the order",
+              "status": "passed"
+            }
+          ]
+        }
+      ],
+      "credits": 0
+    }
+  ],
+  "status": "passed",
+  "root": "/workspace/shipgate/examples/brew-bar",
+  "previewUrl": "http://localhost:5199",
+  "credits": 0,
+  "signoff": {
+    "signedOffBy": "kane-cli",
+    "kaneUser": "yendkontl",
+    "at": "2026-11-13T17:42:01.083Z",
+    "fingerprint": "e93a235dad06f8af",
+    "gitSha": "22aa00f",
+    "tests": [
+      {
+        "test": "tests/order_total_test.md",
+        "status": "passed",
+        "shareUrl": null,
+        "evidencePack": "/home/box/.testmuai/kaneai/sessions/ecc013e3-42fc-429f-a872-03bdaba16e81/evidence/c96ad2b6-d27a-4b4e-921e-73567090741d.evidence",
+        "sessionId": "ecc013e3-42fc-429f-a872-03bdaba16e81"
+      }
+    ]
+  },
+  "deploy": {
+    "status": "deployed",
+    "url": "https://shipgate-brew-bar.vercel.app",
+    "deploymentUrl": "https://shipgate-brew-32r5fih28-yendkontl-3176s-projects.vercel.app",
+    "deploymentId": "dpl_FgNCkHKtvU4MYzoM34vag4p9o2ZF",
+    "inspectorUrl": "https://vercel.com/yendkontl-3176s-projects/shipgate-brew-bar/FgNCkHKtvU4MYzoM34vag4p9o2ZF",
+    "target": "production"
+  },
+  "finishedAt": "2026-11-13T17:42:05.987Z"
+}

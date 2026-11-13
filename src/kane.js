@@ -129,7 +129,7 @@ export function assertionsFrom(runEnd) {
 }
 
 /** Run one *_test.md through Kane CLI against `url`. Streams progress, saves raw NDJSON. */
-export function runTestmd(file, { url, outDir, headless = true, timeout = 420, extraArgs = [], cwd } = {}) {
+export function runTestmd(file, { url, outDir, headless = true, timeout = 420, extraArgs = [], cwd, onLockConflict } = {}) {
   const args = ["testmd", "run", file, "--agent"];
   // Once Kane has recordings, retarget the replay instead of re-authoring step 1
   // when the preview URL changes (local port, Vercel preview, production).
@@ -137,6 +137,9 @@ export function runTestmd(file, { url, outDir, headless = true, timeout = 420, e
   if (url) args.push(recorded ? "--override-start-url" : "--url", url);
   if (headless) args.push("--headless");
   if (timeout) args.push("--timeout", String(timeout));
+  // Test Manager holds a short-lived lock per test. "wait" makes Kane wait for it so
+  // a passing run is committed and gets a shareable evidence link instead of running readonly.
+  if (onLockConflict) args.push("--on-lock-conflict", onLockConflict);
   args.push(...extraArgs);
   fs.mkdirSync(outDir, { recursive: true });
   const stem = path.basename(file, ".md");
@@ -164,7 +167,10 @@ export function runTestmd(file, { url, outDir, headless = true, timeout = 420, e
         } catch { /* non-JSON noise */ }
       }
     });
-    child.stderr.on("data", (d) => { stderr += d.toString(); });
+    child.stderr.on("data", (d) => {
+      stderr += d.toString();
+      for (const l of d.toString().split("\n")) if (l.startsWith("[lock]")) log.kane(l.replace("[lock] ", "test manager lock: "));
+    });
     child.on("close", (code) => {
       raw.end();
       fs.writeFileSync(path.join(outDir, `${stem}.stderr.log`), stderr);

@@ -1,7 +1,26 @@
 {
-  "tests": ["tests"],
-  "preview": { "static": "app", "port": 5199 },
-  "agent": { "type": "builtin", "model": "qwen2.5-coder:7b", "include": "app" },
+  "tests": [
+    "tests"
+  ],
+  "preview": {
+    "static": "app",
+    "port": 5199
+  },
+  "agent": {
+    "type": "builtin",
+    "model": "qwen2.5-coder:7b",
+    "include": "app"
+  },
   "maxAttempts": 3,
-  "deploy": { "provider": "vercel", "dir": "app", "project": "shipgate-brew-bar", "teamId": "team_rlujaf2csicnYR1z5osqUHF6", "prod": true }
+  "deploy": {
+    "provider": "vercel",
+    "dir": "app",
+    "project": "shipgate-brew-bar",
+    "teamId": "team_rlujaf2csicnYR1z5osqUHF6",
+    "prod": true
+  },
+  "kane": {
+    "onLockConflict": "readonly",
+    "timeout": 900
+  }
 }

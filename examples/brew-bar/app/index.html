@@ -3,12 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Brew Bar: order your iced latte, croissant or matcha ahead and pick it up in five minutes." />
+  <meta name="theme-color" content="#f3ead8" />
   <title>Brew Bar · order ahead</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="top">
-    <div class="brand"><span class="dot"></span> Brew Bar</div>
+    <div class="brand"><span class="dot" aria-hidden="true"></span> Brew Bar</div>
     <span class="tag">order ahead · pick up in 5 min</span>
   </header>
 
@@ -16,18 +21,21 @@
     <section class="menu" aria-label="Menu">
       <h1>What are we drinking?</h1>
       <ul class="items" id="menu">
-        <li class="item">
-          <div><h2>Iced Latte</h2><p>double shot, oat milk</p></div>
+        <li class="item item--latte">
+          <span class="swatch" aria-hidden="true"></span>
+          <div class="info"><h2>Iced Latte</h2><p>double shot, oat milk</p></div>
           <span class="price">$4.50</span>
           <button class="add" data-name="Iced Latte" data-price="4.50">Add Iced Latte</button>
         </li>
-        <li class="item">
-          <div><h2>Butter Croissant</h2><p>baked this morning</p></div>
+        <li class="item item--croissant">
+          <span class="swatch" aria-hidden="true"></span>
+          <div class="info"><h2>Butter Croissant</h2><p>baked this morning</p></div>
           <span class="price">$3.00</span>
           <button class="add" data-name="Butter Croissant" data-price="3.00">Add Butter Croissant</button>
         </li>
-        <li class="item">
-          <div><h2>Matcha Cloud</h2><p>ceremonial grade, foam top</p></div>
+        <li class="item item--matcha">
+          <span class="swatch" aria-hidden="true"></span>
+          <div class="info"><h2>Matcha Cloud</h2><p>ceremonial grade, foam top</p></div>
           <span class="price">$5.25</span>
           <button class="add" data-name="Matcha Cloud" data-price="5.25">Add Matcha Cloud</button>
         </li>

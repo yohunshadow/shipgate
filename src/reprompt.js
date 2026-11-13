@@ -37,7 +37,8 @@ export function buildReprompt(results, { attempt, maxAttempts, root, url }) {
       if (body) L.push(`- **What the step asks for:**\n\n${body.split("\n").map((l) => "  > " + l).join("\n")}\n`);
     }
     if (r.runEnd) {
-      if (r.runEnd.oneLiner) L.push(`- **Kane saw:** ${r.runEnd.oneLiner}`);
+      const saw = r.runEnd.oneLiner || (r.bug && r.bug.oneLiner);
+      if (saw) L.push(`- **Kane saw:** ${saw}`);
       if (r.runEnd.reason) L.push(`- **Why it stopped:** ${r.runEnd.reason}`);
       if (r.runEnd.rootCause) L.push(`- **Kane's root cause:** ${r.runEnd.rootCause}`);
       if (r.runEnd.summary && r.runEnd.summary !== r.runEnd.oneLiner) L.push(`- **Kane's notes:** ${r.runEnd.summary.replace(/\n+/g, " ")}`);
@@ -50,6 +51,7 @@ export function buildReprompt(results, { attempt, maxAttempts, root, url }) {
       const fsKeys = Object.keys(r.runEnd.finalState || {});
       if (fsKeys.length) L.push(`- **Values Kane captured:** \`${JSON.stringify(r.runEnd.finalState)}\``);
     }
+    if (!r.runEnd && r.bug && r.bug.oneLiner) L.push(`- **Kane saw:** ${r.bug.oneLiner}`);
     if (r.bug) L.push(`- **Kane bug triage:** ${r.bug.family}/${r.bug.category}, severity ${r.bug.severity}, confidence ${r.bug.confidence}${r.bug.title ? ` — "${r.bug.title}"` : ""}`);
     if (fs_ && fs_.actions.length) {
       L.push(`- **What Kane did in that step:**`);

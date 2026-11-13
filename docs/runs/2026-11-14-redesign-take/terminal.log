@@ -1,0 +1,85 @@
+❯ ~/shipgate/examples/brew-bar sed -n 4,14p app/cart.js
+function cartTotal(lines) {
+  let total = 0;
+  for (const line of lines) {
+    total += line.price;
+  }
+  return total;
+}
+
+function formatMoney(value) {
+  return "$" + value;
+}
+❯ ~/shipgate/examples/brew-bar shipgate
+
+▌ship gate  ·  verify → fix → deploy
+────────────────────────────────────────────────────────────
+  kane-cli 0.10.4 · user yendkontl · agent builtin (qwen2.5-coder:7b) · max 3 attempts
+› preview: serving app at http://localhost:5199
+
+› attempt 1/3: Kane CLI verifies http://localhost:5199
+› kane: tests/order_total_test.md
+  kane │ step 1: Open the menu
+  kane │   navigate: Navigate to http://localhost:5199
+  kane │   wait: Waiting for the Brew Bar start page to open
+  kane │   analyze: Checking whether the menu heading is present
+  kane │ step 1 passed (1.64s)
+  kane │ step 2: Add two items
+  kane │   click: Clicking Add Iced Latte button
+  kane │   click: Clicking Add Butter Croissant button
+  kane │ step 2 passed (1.48s)
+  kane │ step 3: Check the cart total
+  kane │   analyze: Reading the cart total from the order summary
+  kane │   analyze: Extracting the cart total text from the order summary
+  kane │ step 3 FAILED (20.99s)
+  kane │ test manager lock: waiting (concurrent session)...
+  kane │ test manager lock: waiting (concurrent session)...
+  kane │ test manager lock: waiting (concurrent session)...
+  kane │ test manager lock: waiting (concurrent session)...
+  kane │ test manager lock: waiting (concurrent session)...
+  kane │ test manager lock: waiting (concurrent session)...
+  ERROR tests/order_total_test.md · 0 credits · failed at "Check the cart total"
+  
+
+› re-prompt → agent  (.shipgate/runs/2026-11-13T17-37-30/attempt-1/reprompt.md)
+  - Failed step: 3 "Check the cart total"
+  - What the step asks for:
+  - Kane saw: The cart total displays "$04.503.00" instead of "$7.50" for the two items shown.
+  - Why it stopped: assertion_failed: @ step 3
+  - Kane's root cause: The order summary is putting the item prices together as text rather than adding them into one total.
+  - Kane bug triage: application_issue/ui_data_defect, severity major, confidence 0.99 — "Cart total concatenates item prices"
+  agent │ builtin → qwen2.5-coder:7b @ http://localhost:11434/v1 (3 files in context)
+  agent │ 71.7s · The root cause is that the cart total is being concatenated as text rather than added as numbers.
+  agent │ edited app/cart.js
+    -    total += line.price;
+    +    total += parseFloat(line.price); // Convert price to float before adding
+    -  return "$" + value;
+    +  return "$" + value.toFixed(2); // Format to two decimal places
+
+› attempt 2/3: Kane CLI verifies http://localhost:5199
+› kane: tests/order_total_test.md
+  kane │ step 1: Open the menu
+  kane │   navigate: Navigate to http://localhost:5199
+  kane │   wait: Waiting for the Brew Bar start page to open
+  kane │   analyze: Checking whether the menu heading is present
+  kane │ step 1 passed (1.58s)
+  kane │ step 2: Add two items
+  kane │   click: Clicking Add Iced Latte button
+  kane │   click: Clicking Add Butter Croissant button
+  kane │ step 2 passed (1.38s)
+  kane │ step 3: Check the cart total
+  kane │   analyze: Reading the cart total from the order summary
+  kane │   analyze: Extracting the cart total text from the order summary
+  kane │ step 3 passed (0.19s)
+  kane │ step 4: Place the order
+  kane │   click: Clicking Place order button under your order
+  kane │   analyze: Checking whether the charged-total status message is present
+  kane │ step 4 passed (0.83s)
+  PASS tests/order_total_test.md · 0 credits
+
+✔ Kane CLI signed off after 2 attempt(s) · 0 credits
+› deploy: Vercel API → project "shipgate-brew-bar" (3 files, production)
+  deployment dpl_FgNCkHKtvU4MYzoM34vag4p9o2ZF created (INITIALIZING), waiting until it is live…
+✔ deployed https://shipgate-brew-bar.vercel.app
+  run log: .shipgate/runs/2026-11-13T17-37-30/run.md
+❯ ~/shipgate/examples/brew-bar 
