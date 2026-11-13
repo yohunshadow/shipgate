@@ -1,0 +1,10 @@
+{
+  "name": "brew-bar-demo",
+  "private": true,
+  "description": "Tiny order-ahead cart with a seeded bug, used to demo Ship Gate's fail → fix → pass → deploy loop.",
+  "scripts": {
+    "gate": "shipgate",
+    "verify": "shipgate verify",
+    "reset-bug": "git checkout -- app/cart.js"
+  }
+}
