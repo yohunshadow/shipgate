@@ -96,11 +96,29 @@ export function parseTestmdEvents(events, file) {
       rootCause: re.verdict && re.verdict.root_cause,
       verdictFamily: re.verdict && re.verdict.family,
       sessionDir: re.session_dir,
+      assertions: assertionsFrom(re),
     };
   }
   if (res.status === "error" && res.steps.length && res.steps.every((s) => s.status === "passed")) res.status = "passed";
   res.credits = Math.round(res.credits * 100) / 100;
   return res;
+}
+
+/** Expected-vs-actual checks Kane recorded in run_end.context.memory (non-secret only). */
+export function assertionsFrom(runEnd) {
+  const mem = (runEnd.context && runEnd.context.memory) || {};
+  const vars = (runEnd.context && runEnd.context.variables) || {};
+  const out = [];
+  for (const [name, m] of Object.entries(mem)) {
+    if (!m || typeof m !== "object" || (vars[name] && vars[name].secret)) continue;
+    const failed = /->\s*FAIL\b/.test(m.reasoning || "");
+    const passed = /->\s*PASS\b/.test(m.reasoning || "");
+    out.push({
+      name, condition: m.condition, expected: m.expected_value || null, actual: m.extracted_value,
+      result: failed ? "FAIL" : passed ? "PASS" : "stored", locator: (m.locators || [])[0] || null, code: m.code_js || null,
+    });
+  }
+  return out;
 }
 
 /** Run one *_test.md through Kane CLI against `url`. Streams progress, saves raw NDJSON. */

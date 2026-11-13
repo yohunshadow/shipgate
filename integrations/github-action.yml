@@ -1,0 +1,17 @@
+# .github/workflows/shipgate.yml: block merges/deploys until Kane CLI signs off.
+name: ship gate
+on: [pull_request]
+jobs:
+  kane:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm i -g @testmuai/kane-cli github:yohunshadow/shipgate
+      - run: kane-cli login --username "${{ secrets.LT_USERNAME }}" --access-key "${{ secrets.LT_ACCESS_KEY }}"
+      # verify only in CI (no agent): exits 1 and prints Kane's re-prompt when blocked
+      - run: shipgate verify
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: shipgate, path: .shipgate }

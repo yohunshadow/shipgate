@@ -41,6 +41,11 @@ export function buildReprompt(results, { attempt, maxAttempts, root, url }) {
       if (r.runEnd.reason) L.push(`- **Why it stopped:** ${r.runEnd.reason}`);
       if (r.runEnd.rootCause) L.push(`- **Kane's root cause:** ${r.runEnd.rootCause}`);
       if (r.runEnd.reasonCode) L.push(`- **Reason code:** \`${r.runEnd.reasonCode}\``);
+      for (const a of (r.runEnd.assertions || []).filter((x) => x.result === "FAIL")) {
+        L.push(`- **Assertion failed:** ${a.condition}\n  - expected: \`${a.expected}\`\n  - actual on the page: \`${a.actual}\`${a.locator ? `\n  - element: \`${a.locator}\`` : ""}${a.code ? ` read via \`${a.code}\`` : ""}`);
+      }
+      const stored = (r.runEnd.assertions || []).filter((x) => x.result === "stored");
+      if (stored.length) L.push(`- **Values Kane captured:** ${stored.map((x) => `\`${x.name}\` = \`${x.actual}\``).join(", ")}`);
       const fsKeys = Object.keys(r.runEnd.finalState || {});
       if (fsKeys.length) L.push(`- **Values Kane captured:** \`${JSON.stringify(r.runEnd.finalState)}\``);
     }

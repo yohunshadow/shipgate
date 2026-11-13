@@ -12,7 +12,7 @@ export function parseEdits(text) {
   if (edits.length) return edits;
   // Fallback: models often answer "FILE: path" + a fenced full file instead.
   const WHOLE = /FILE:\s*(\S+)\s*\n+```[\w-]*\n([\s\S]*?)\n```/g;
-  while ((m = WHOLE.exec(text))) edits.push({ file: m[1].replace(/^[`'"]|[`'"]$/g, ""), whole: m[2] + "\n" });
+  while ((m = WHOLE.exec(text))) edits.push({ file: m[1].replace(/^[`'"]|[`'"]$/g, ""), whole: m[2].replace(/\s*$/, "\n") });
   return edits;
 }
 
